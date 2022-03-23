@@ -67,7 +67,29 @@ TEST_CASE("Combined Test"){
     CHECK_NOTHROW(testBook.write(3,0,0,Direction::Vertical,""));
     CHECK_NOTHROW(testBook.write(3,0,0,Direction::Horizontal,""));
 
-    // simple erase tests
+    // Erase tests
+    testBook.erase(4,0,0,Direction::Vertical,3);
+    CHECK_EQ(testBook.read(4,0,0,Direction::Vertical,5),"~~~__");
+    testBook.erase(4,0,1,Direction::Horizontal,3);
+    CHECK_EQ(testBook.read(4,0,1,Direction::Horizontal,5),"~~~__");
+    CHECK_EQ(testBook.read(4,0,0,Direction::Horizontal,5),"~~~~_");
 
-    
+    testBook.write(4,10,0,Direction::Vertical,"test");
+    testBook.erase(4,10,0,Direction::Vertical,3);
+    CHECK_EQ(testBook.read(4,10,0,Direction::Vertical,5),"~~~t_");
+
+    testBook.write(4,20,0,Direction::Horizontal,"test");
+    testBook.erase(4,20,0,Direction::Horizontal,3);
+    CHECK_EQ(testBook.read(4,20,0,Direction::Horizontal,5),"~~~t_"); 
+
+    // Last Test
+    testBook.write(5,0,10,Direction::Horizontal,"Last");
+    testBook.write(5,0,15,Direction::Horizontal,"Test");
+    CHECK_EQ(testBook.read(5,0,10,Direction::Horizontal,9),"Last_Test");
+    testBook.erase(5,0,12,Direction::Horizontal,2);
+    testBook.erase(5,0,17,Direction::Horizontal,2);
+    CHECK_EQ(testBook.read(5,0,10,Direction::Horizontal,9),"La~~_Te~~");
+    testBook.erase(5,0,11,Direction::Vertical,2);
+    testBook.erase(5,0,15,Direction::Vertical,2);
+    CHECK_EQ(testBook.read(5,0,10,Direction::Horizontal,9),"L~~~_~e~~");
 };
